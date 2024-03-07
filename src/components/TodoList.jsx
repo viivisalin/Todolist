@@ -6,39 +6,37 @@ export default function TodoList() {
     const [todo, setTodo] = useState({ description: '', date: '' });
     const [todos, setTodos] = useState([]);
 
-    const handleChange = (event) => {
-        setTodo({ ...todo, [event.target.name]: event.target.value });
+    const handleAddTodo = () => {
+        if (todo.date !== '' || todo.description !== ''){
+            setTodos([...todos, todo]);
+            setTodo({date:'', description:''});
+        } else {
+            alert("Input date and decription!")
+        }
     };
 
-    const addTodo = (event) => {
-        event.preventDefault();
-        setTodos([...todos, todo]);
-        setTodo({ description: "", date: "" });
-    };
-
-    const deleteByIndex = (index) => {
-        console.log("poistettavan index = " + index);
-        setTodos(todos.filter((todo, i) => i != index));
+    const handleDeleteTodo = (deleteIndex) => {
+        setTodos(todos.filter((todo, index) => index !== deleteIndex));
     }
 
     return (
         <>
+        <h1>Todos</h1>
+
+            <label>Description</label>
             <input
-                type="text"
-                name="description"
-                placeholder="Description"
-                onChange={handleChange}
-                value={todo.description}
+                value= {todo.description}
+                onChange={ e => setTodo({...todo, description: e.target.value})}
             />
+            <label>Date</label>
             <input
-                type="text"
-                name="date"
-                placeholder="Date"
-                onChange={handleChange}
-                value={todo.date}
+                type="date"
+                value= {todo.date}
+                onChange={ e => setTodo({...todo, date: e.target.value})}
             />
-            <button onClick={addTodo}>Add</button>
-            <TodoTable todos={todos} poistaTodo={deleteByIndex} />
+
+            <button onClick={handleAddTodo}>Add</button>
+            <TodoTable todos={todos} handleDeleteTodo={handleDeleteTodo} />
         </>
     );
 }
